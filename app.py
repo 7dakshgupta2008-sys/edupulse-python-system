@@ -1,4 +1,4 @@
-# app.py - Main Python Flask Web Application with SHA-256 Password Hashing
+# app.py - Main Python Flask Web Application with Smart Resilient Login Matching
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import json
 import os
@@ -11,8 +11,26 @@ app.secret_key = 'edupulse_secret_key_123'
 DB_PATH = os.path.join(os.path.dirname(__file__), 'database.json')
 
 def hash_password(password):
-    """Generates a secure 64-character SHA-256 hex digest for passwords."""
+    """Generates SHA-256 hex digest for passwords."""
     return hashlib.sha256(str(password).strip().encode('utf-8')).hexdigest()
+
+def check_password_match(input_pass, stored_pass):
+    """Smart password verification: matches SHA-256 hash or fallback plain text."""
+    if not stored_pass:
+        return False
+    input_str = str(input_pass).strip()
+    stored_str = str(stored_pass).strip()
+    hashed_input = hash_password(input_str)
+
+    # 1. Compare SHA-256 hash
+    if hashed_input == stored_str or hashed_input.lower() == stored_str.lower():
+        return True
+
+    # 2. Compare plain text (fallback for older DBs)
+    if input_str == stored_str or input_str.lower() == stored_str.lower():
+        return True
+
+    return False
 
 def load_db():
     mysql_db = load_db_from_mysql()
@@ -45,35 +63,34 @@ def index():
             return redirect(url_for('parent_performance'))
     return redirect(url_for('login'))
 
-# LOGIN ROUTE (SHA-256 Password Hash Verification)
+# LOGIN ROUTE (Resilient Matching across hashed and plain text DBs)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     db = load_db()
     if request.method == 'POST':
         user_id_input = str(request.form.get('user_id', '')).strip().lower()
         password_input = str(request.form.get('password', '')).strip()
-        hashed_input = hash_password(password_input)
 
-        # 1. Check in Students list
+        # 1. Check Students list
         for s in db.get('students', []):
             s_id = str(s.get('studentId', '')).strip().lower()
             s_email = str(s.get('email', '')).strip().lower()
             stored_pass = str(s.get('password', '')).strip()
 
-            if (user_id_input == s_id or user_id_input == s_email) and (hashed_input == stored_pass or password_input == stored_pass):
+            if (user_id_input == s_id or user_id_input == s_email) and check_password_match(password_input, stored_pass):
                 session['user_id'] = s['id']
                 session['user_name'] = s['name']
                 session['role'] = 'STUDENT'
                 return redirect(url_for('student_performance'))
 
-        # 2. Check in Users list (Admin, Teacher, Parent)
+        # 2. Check Users list (Admin, Teacher, Parent)
         for u in db.get('users', []):
             u_id = str(u.get('id', '')).strip().lower()
             u_email = str(u.get('email', '')).strip().lower()
             u_name = str(u.get('name', '')).strip().lower()
             stored_pass = str(u.get('password', '')).strip()
 
-            if (user_id_input == u_id or user_id_input == u_email or user_id_input in u_name) and (hashed_input == stored_pass or password_input == stored_pass):
+            if (user_id_input == u_id or user_id_input == u_email or user_id_input in u_name) and check_password_match(password_input, stored_pass):
                 session['user_id'] = u['id']
                 session['user_name'] = u['name']
                 session['role'] = u['role']
