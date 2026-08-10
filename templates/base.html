@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Academic Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .sub-nav {
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 0.65rem 2rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .sub-nav a {
+            padding: 0.4rem 0.85rem;
+            border-radius: 6px;
+            font-size: 0.825rem;
+            font-weight: 600;
+            text-decoration: none;
+            color: #94a3b8;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid #334155;
+            transition: all 0.15s ease;
+        }
+        .sub-nav a:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        .sub-nav a.active {
+            color: #fff;
+            background-color: #3b82f6;
+            border-color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div>
+            <div class="brand-title">Student Academic Management System</div>
+            <div style="font-size: 0.8rem; color: #94a3b8; display: flex; align-items: center; gap: 0.5rem;">
+                Python (Flask) + C Engine + Java Engine + HTML & CSS
+                {% if db_source == 'XAMPP_MYSQL' %}
+                <span class="badge badge-success">🛢️ XAMPP MySQL Connected</span>
+                {% else %}
+                <span class="badge badge-warning">📄 Local JSON DB</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="role-switcher">
+            {% if session.get('role') %}
+                <span style="font-size: 0.85rem; color: #f8fafc; margin-right: 0.5rem;">
+                    👤 <strong>{{ session.get('user_name') }}</strong> ({{ session.get('role') }})
+                </span>
+                <a href="/logout" class="btn btn-secondary" style="background-color: #ef4444; color: #fff;">Logout</a>
+            {% else %}
+                <a href="/login" class="btn btn-primary" style="background-color: #10b981;">🔒 Login Screen</a>
+            {% endif %}
+        </div>
+    </header>
+
+    {% if session.get('role') %}
+    <!-- ROLE-SPECIFIC SUB-NAVIGATION MENU -->
+    <nav class="sub-nav">
+        {% if session.get('role') == 'ADMINISTRATOR' %}
+            <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-right: 0.35rem;">ADMIN MENU:</span>
+            <a href="/admin/overview" class="{% if active_sub == 'overview' %}active{% endif %}">📊 System Monitoring</a>
+            <a href="/admin/teachers" class="{% if active_sub == 'teachers' %}active{% endif %}">👩‍🏫 Teacher Management</a>
+            <a href="/admin/students" class="{% if active_role == 'ADMINISTRATOR' and active_sub == 'students' %}active{% endif %}">🎓 Student Management</a>
+            <a href="/admin/parents" class="{% if active_sub == 'parents' %}active{% endif %}">👪 Parent Management</a>
+            <a href="/admin/timetable" class="{% if active_sub == 'timetable' %}active{% endif %}">🗓️ Timetable Management</a>
+
+        {% elif session.get('role') == 'TEACHER' %}
+            <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-right: 0.35rem;">TEACHER MENU:</span>
+            <a href="/teacher/overview" class="{% if active_sub == 'overview' %}active{% endif %}">📊 Overall Performance & Behavior</a>
+            <a href="/teacher/marks" class="{% if active_sub == 'marks' %}active{% endif %}">📈 Enter & Manage Marks</a>
+            <a href="/teacher/attendance" class="{% if active_sub == 'attendance' %}active{% endif %}">📅 Update Attendance</a>
+            <a href="/teacher/assignments" class="{% if active_sub == 'assignments' %}active{% endif %}">📝 Add & Evaluate Assignments</a>
+            <a href="/teacher/quizzes" class="{% if active_sub == 'quizzes' %}active{% endif %}">🎯 Add Quizzes / Tests</a>
+            <a href="/teacher/records" class="{% if active_sub == 'records' %}active{% endif %}">💬 Student Records & Remarks</a>
+
+        {% elif session.get('role') == 'STUDENT' %}
+            <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-right: 0.35rem;">STUDENT MENU:</span>
+            <a href="/student/performance" class="{% if active_sub == 'performance' %}active{% endif %}">🤖 Overall Performance & AI Chatbot</a>
+            <a href="/student/marks" class="{% if active_sub == 'marks' %}active{% endif %}">📈 Marks</a>
+            <a href="/student/attendance" class="{% if active_sub == 'attendance' %}active{% endif %}">📅 Attendance</a>
+            <a href="/student/assignments" class="{% if active_sub == 'assignments' %}active{% endif %}">📝 Assignments</a>
+            <a href="/student/quizzes" class="{% if active_sub == 'quizzes' %}active{% endif %}">🎯 Quiz / Test Results</a>
+            <a href="/student/remarks" class="{% if active_sub == 'remarks' %}active{% endif %}">💬 Feedback / Remarks</a>
+            <a href="/student/timetable" class="{% if active_sub == 'timetable' %}active{% endif %}">🗓️ Class Timetable</a>
+
+        {% elif session.get('role') == 'PARENT' %}
+            <span style="font-size: 0.75rem; color: #94a3b8; font-weight: 700; margin-right: 0.35rem;">PARENT MENU:</span>
+            <a href="/parent/performance" class="{% if active_sub == 'performance' %}active{% endif %}">💡 Overall Performance & AI Advice</a>
+            <a href="/parent/profile" class="{% if active_sub == 'profile' %}active{% endif %}">👤 Student Profile</a>
+            <a href="/parent/marks" class="{% if active_sub == 'marks' %}active{% endif %}">📈 Marks</a>
+            <a href="/parent/attendance" class="{% if active_sub == 'attendance' %}active{% endif %}">📅 Attendance</a>
+            <a href="/parent/assignments" class="{% if active_sub == 'assignments' %}active{% endif %}">📝 Assignment Performance</a>
+            <a href="/parent/quizzes" class="{% if active_sub == 'quizzes' %}active{% endif %}">🎯 Quiz / Test Results</a>
+            <a href="/parent/remarks" class="{% if active_sub == 'remarks' %}active{% endif %}">💬 Teacher Feedback & Remarks</a>
+            <a href="/parent/timetable" class="{% if active_sub == 'timetable' %}active{% endif %}">🗓️ Child Timetable</a>
+        {% endif %}
+    </nav>
+    {% endif %}
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>

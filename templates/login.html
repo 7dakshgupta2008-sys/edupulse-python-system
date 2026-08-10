@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="max-width: 420px; margin: 3rem auto;">
+    <div class="card" style="padding: 2rem;">
+        <h2 style="font-size: 1.3rem; margin-bottom: 0.5rem; text-align: center;">🔒 Secure User Login</h2>
+        <p style="font-size: 0.8rem; color: #94a3b8; text-align: center; margin-bottom: 1.5rem;">
+            Enter your Student ID (or Email) and Password to access your portal.
+        </p>
+
+        {% if error %}
+        <div style="color: #ef4444; font-size: 0.85rem; margin-bottom: 1rem; text-align: center; font-weight: 700;">
+            ⚠️ {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="/login" method="POST">
+            <label style="font-size: 0.8rem; color: #94a3b8;">Student ID or Email:</label>
+            <input type="text" name="user_id" class="form-control" placeholder="e.g. STU-101 or admin@school.com" required>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Password:</label>
+            <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem; padding: 0.75rem;">
+                Login to Portal
+            </button>
+        </form>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #334155; font-size: 0.75rem; color: #94a3b8;">
+            <strong>Demo Quick Passwords:</strong><br>
+            • Student (Alex Rivera): ID <code>STU-101</code> \| Password <code>student123</code><br>
+            • Admin: Email <code>admin@school.com</code> \| Password <code>admin123</code><br>
+            • Teacher: Email <code>teacher@school.com</code> \| Password <code>teacher123</code><br>
+            • Parent: Email <code>robert@parent.com</code> \| Password <code>parent123</code>
+        </div>
+    </div>
+</div>
+{% endblock %}

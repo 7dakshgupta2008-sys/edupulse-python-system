@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if active_sub == 'overview' %}
+<div class="card">
+    <h2 style="font-size: 1.25rem;">📊 Overall System Monitoring</h2>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Real-time institutional oversight across enrolled students, faculty, and academic health.</p>
+</div>
+
+<div class="grid-3" style="margin-bottom: 1.25rem;">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 1.8rem; font-weight: 800; color: #3b82f6;">{{ students|length }}</div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">Enrolled Students</div>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 1.8rem; font-weight: 800; color: #10b981;">{{ teachers|length }}</div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">Faculty Teachers</div>
+    </div>
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 1.8rem; font-weight: 800; color: #f59e0b;">{{ timetable|length }}</div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">Active Timetable Slots</div>
+    </div>
+</div>
+
+<div class="card">
+    <h3 class="card-title">Enrolled Students Overview Roster</h3>
+    <table>
+        <thead>
+            <tr><th>Name</th><th>Student ID</th><th>Class</th><th>Attendance</th></tr>
+        </thead>
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td style="font-weight: 700;">{{ s.name }}</td>
+                <td>{{ s.studentId }}</td>
+                <td>{{ s.class }}</td>
+                <td>{{ s.attendance }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'teachers' %}
+<div class="grid-2">
+    <!-- Add Teacher Form -->
+    <div class="card">
+        <h3 class="card-title">Add New Teacher</h3>
+        <form action="/admin/add_teacher" method="POST">
+            <label style="font-size: 0.8rem; color: #94a3b8;">Teacher Name:</label>
+            <input type="text" name="name" class="form-control" placeholder="Prof. John Doe" required>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Email Address:</label>
+            <input type="text" name="email" class="form-control" placeholder="john@school.com" required>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Subject:</label>
+            <select name="subject" class="form-control">
+                <option value="Physics & Math">Physics & Math</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Computer Science">Computer Science</option>
+            </select>
+
+            <button type="submit" class="btn btn-primary">Save Teacher Record</button>
+        </form>
+    </div>
+
+    <!-- Current Teachers List -->
+    <div class="card">
+        <h3 class="card-title">Faculty List & Teacher Management</h3>
+        <table>
+            <thead>
+                <tr><th>Name</th><th>Email</th><th>Subject</th></tr>
+            </thead>
+            <tbody>
+                {% for u in teachers %}
+                <tr>
+                    <td style="font-weight: 700;">{{ u.name }}</td>
+                    <td>{{ u.email }}</td>
+                    <td><span class="badge badge-success">{{ u.subject }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% elif active_sub == 'students' %}
+<div class="grid-2">
+    <!-- Add Student Form -->
+    <div class="card">
+        <h3 class="card-title">Add New Student</h3>
+        <form action="/admin/add_student" method="POST">
+            <label style="font-size: 0.8rem; color: #94a3b8;">Student Name:</label>
+            <input type="text" name="name" class="form-control" placeholder="Jordan Taylor" required>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Student ID:</label>
+            <input type="text" name="student_id" class="form-control" placeholder="STU-105" required>
+
+            <button type="submit" class="btn btn-primary">Save Student Record</button>
+        </form>
+    </div>
+
+    <!-- Current Students List -->
+    <div class="card">
+        <h3 class="card-title">Enrolled Students Roster</h3>
+        <table>
+            <thead>
+                <tr><th>Name</th><th>ID</th><th>Class</th><th>Attendance</th></tr>
+            </thead>
+            <tbody>
+                {% for s in students %}
+                <tr>
+                    <td style="font-weight: 700;">{{ s.name }}</td>
+                    <td>{{ s.studentId }}</td>
+                    <td>{{ s.class }}</td>
+                    <td>{{ s.attendance }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% elif active_sub == 'parents' %}
+<div class="card">
+    <h3 class="card-title">Parent & Guardian Directory</h3>
+    <table>
+        <thead>
+            <tr><th>Parent Name</th><th>Email</th><th>Phone</th><th>Linked Student</th></tr>
+        </thead>
+        <tbody>
+            {% for p in parents %}
+            <tr>
+                <td style="font-weight: 700;">{{ p.name }}</td>
+                <td>{{ p.email }}</td>
+                <td>{{ p.phone }}</td>
+                <td><span class="badge badge-warning">Linked Student Account</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'timetable' %}
+<div class="grid-2">
+    <div class="card">
+        <h3 class="card-title">Add Timetable Slot</h3>
+        <form action="/admin/add_timetable" method="POST">
+            <label style="font-size: 0.8rem; color: #94a3b8;">Day:</label>
+            <select name="day" class="form-control">
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+            </select>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Time Slot:</label>
+            <input type="text" name="time" class="form-control" placeholder="09:00 AM" required>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Subject:</label>
+            <input type="text" name="subject" class="form-control" placeholder="Physics" required>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Room / Lab:</label>
+            <input type="text" name="room" class="form-control" placeholder="Lab 1" required>
+
+            <button type="submit" class="btn btn-primary">Add Slot</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3 class="card-title">Class Timetable Grid</h3>
+        <table>
+            <thead>
+                <tr><th>Day</th><th>Time</th><th>Subject</th><th>Teacher</th><th>Room</th></tr>
+            </thead>
+            <tbody>
+                {% for slot in timetable %}
+                <tr>
+                    <td style="font-weight: 700;">{{ slot.day }}</td>
+                    <td>{{ slot.time }}</td>
+                    <td><span class="badge badge-success">{{ slot.subject }}</span></td>
+                    <td>{{ slot.teacher }}</td>
+                    <td>{{ slot.room }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

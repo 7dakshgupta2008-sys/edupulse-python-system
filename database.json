@@ -1,0 +1,116 @@
+{
+  "users": [
+    { "id": "u1", "name": "Dr. Sarah Vance", "role": "ADMINISTRATOR", "email": "admin@school.com", "password": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918" },
+    { "id": "u2", "name": "Prof. Marcus Sterling", "role": "TEACHER", "email": "teacher@school.com", "password": "909405d41f1737be7049aa69b50b55c2763b65ef399c55bdfcf0bfd6501c5f8e", "subject": "Physics & Math", "class": "Class 10-A" },
+    { "id": "u3", "name": "Alex Rivera", "role": "STUDENT", "email": "alex@student.com", "password": "cd6357efdd966de8dae3f193f0641838647ef7b9101f358352661c94488b0244", "class": "Class 10-A", "studentId": "STU-101" },
+    { "id": "u4", "name": "Sophia Chen", "role": "STUDENT", "email": "sophia@student.com", "password": "cd6357efdd966de8dae3f193f0641838647ef7b9101f358352661c94488b0244", "class": "Class 10-A", "studentId": "STU-102" },
+    { "id": "u5", "name": "Robert Rivera", "role": "PARENT", "email": "robert@parent.com", "password": "eb2a370e7e174b0ed18fa7419e71ec50875e546114eb3b4831fb40f438a2e7df", "childId": "u3", "phone": "+1 555-0192" }
+  ],
+  "students": [
+    {
+      "id": "u3",
+      "name": "Alex Rivera",
+      "studentId": "STU-101",
+      "password": "cd6357efdd966de8dae3f193f0641838647ef7b9101f358352661c94488b0244",
+      "class": "Class 10-A",
+      "attendance": 72,
+      "parentName": "Robert Rivera",
+      "marks": {
+        "Physics": 58,
+        "Maths": 62,
+        "Chemistry": 78,
+        "ComputerScience": 94,
+        "English": 85,
+        "Biology": 72,
+        "EnvScience": 88,
+        "PhysicalEdu": 95
+      },
+      "teacherRemarks": "Alex is doing great in Computer Science, but needs extra practice in Physics.",
+      "quizzes": [
+        { "title": "Physics Quiz 1", "score": 58, "total": 100, "date": "2026-08-01" },
+        { "title": "Math Test 1", "score": 64, "total": 100, "date": "2026-07-25" }
+      ],
+      "assignments": [
+        { "title": "Lab Report 1: Rotational Motion", "subject": "Physics", "dueDate": "2026-08-15", "status": "Submitted", "grade": "82/100" },
+        { "title": "Calculus Integration Set", "subject": "Maths", "dueDate": "2026-08-18", "status": "Pending", "grade": "Pending" }
+      ]
+    },
+    {
+      "id": "u4",
+      "name": "Sophia Chen",
+      "studentId": "STU-102",
+      "password": "cd6357efdd966de8dae3f193f0641838647ef7b9101f358352661c94488b0244",
+      "class": "Class 10-A",
+      "attendance": 98,
+      "parentName": "Jennifer Chen",
+      "marks": {
+        "Physics": 96,
+        "Maths": 98,
+        "Chemistry": 94,
+        "ComputerScience": 100,
+        "English": 92,
+        "Biology": 95,
+        "EnvScience": 94,
+        "PhysicalEdu": 98
+      },
+      "teacherRemarks": "Outstanding academic performance and class leadership.",
+      "quizzes": [
+        { "title": "Physics Quiz 1", "score": 98, "total": 100, "date": "2026-08-01" },
+        { "title": "Math Test 1", "score": 96, "total": 100, "date": "2026-07-25" }
+      ],
+      "assignments": [
+        { "title": "Lab Report 1: Rotational Motion", "subject": "Physics", "dueDate": "2026-08-15", "status": "Graded", "grade": "98/100" }
+      ]
+    }
+  ],
+  "timetable": [
+    { "period": 1, "day": "Monday", "time": "08:30 AM - 09:15 AM", "subject": "Physics", "teacher": "kamal mam", "room": "Lab 1" },
+    { "period": 2, "day": "Monday", "time": "09:15 AM - 10:00 AM", "subject": "Maths", "teacher": "sunita mam", "room": "Room 204" },
+    { "period": 3, "day": "Monday", "time": "10:00 AM - 10:45 AM", "subject": "Chemistry", "teacher": "geenu mam", "room": "Lab 2" },
+    { "period": 4, "day": "Monday", "time": "10:45 AM - 11:30 AM", "subject": "Computer Science", "teacher": "Ashita mam", "room": "CompLab A" },
+    { "period": 5, "day": "Monday", "time": "11:30 AM - 12:15 PM", "subject": "Physics Lab", "teacher": "ankur sir", "room": "Lab 1" },
+    { "period": 6, "day": "Monday", "time": "01:00 PM - 01:45 PM", "subject": "English Literature", "teacher": "Priya mam", "room": "Room 101" },
+    { "period": 7, "day": "Monday", "time": "01:45 PM - 02:30 PM", "subject": "Biology", "teacher": "Ravi sir", "room": "BioLab" },
+    { "period": 8, "day": "Monday", "time": "02:30 PM - 03:15 PM", "subject": "Physical Education", "teacher": "Vikram sir", "room": "Sports Ground" },
+
+    { "period": 1, "day": "Tuesday", "time": "08:30 AM - 09:15 AM", "subject": "Maths", "teacher": "sunita mam", "room": "Room 204" },
+    { "period": 2, "day": "Tuesday", "time": "09:15 AM - 10:00 AM", "subject": "Physics", "teacher": "kamal mam", "room": "Lab 1" },
+    { "period": 3, "day": "Tuesday", "time": "10:00 AM - 10:45 AM", "subject": "Computer Science", "teacher": "Ashita mam", "room": "CompLab A" },
+    { "period": 4, "day": "Tuesday", "time": "10:45 AM - 11:30 AM", "subject": "Chemistry", "teacher": "geenu mam", "room": "Lab 2" },
+    { "period": 5, "day": "Tuesday", "time": "11:30 AM - 12:15 PM", "subject": "Physics Lab", "teacher": "ankur sir", "room": "Lab 1" },
+    { "period": 6, "day": "Tuesday", "time": "01:00 PM - 01:45 PM", "subject": "English Literature", "teacher": "Priya mam", "room": "Room 101" },
+    { "period": 7, "day": "Tuesday", "time": "01:45 PM - 02:30 PM", "subject": "Biology", "teacher": "Ravi sir", "room": "BioLab" },
+    { "period": 8, "day": "Tuesday", "time": "02:30 PM - 03:15 PM", "subject": "Physical Education", "teacher": "Vikram sir", "room": "Sports Ground" },
+
+    { "period": 1, "day": "Wednesday", "time": "08:30 AM - 09:15 AM", "subject": "Chemistry", "teacher": "geenu mam", "room": "Lab 2" },
+    { "period": 2, "day": "Wednesday", "time": "09:15 AM - 10:00 AM", "subject": "Computer Science", "teacher": "Ashita mam", "room": "CompLab A" },
+    { "period": 3, "day": "Wednesday", "time": "10:00 AM - 10:45 AM", "subject": "Physics Lab", "teacher": "ankur sir", "room": "Lab 1" },
+    { "period": 4, "day": "Wednesday", "time": "10:45 AM - 11:30 AM", "subject": "Maths", "teacher": "sunita mam", "room": "Room 204" },
+    { "period": 5, "day": "Wednesday", "time": "11:30 AM - 12:15 PM", "subject": "Physics", "teacher": "kamal mam", "room": "Lab 1" },
+    { "period": 6, "day": "Wednesday", "time": "01:00 PM - 01:45 PM", "subject": "English Literature", "teacher": "Priya mam", "room": "Room 101" },
+    { "period": 7, "day": "Wednesday", "time": "01:45 PM - 02:30 PM", "subject": "Biology", "teacher": "Ravi sir", "room": "BioLab" },
+    { "period": 8, "day": "Wednesday", "time": "02:30 PM - 03:15 PM", "subject": "Physical Education", "teacher": "Vikram sir", "room": "Sports Ground" },
+
+    { "period": 1, "day": "Thursday", "time": "08:30 AM - 09:15 AM", "subject": "Computer Science", "teacher": "Ashita mam", "room": "CompLab A" },
+    { "period": 2, "day": "Thursday", "time": "09:15 AM - 10:00 AM", "subject": "English Literature", "teacher": "Priya mam", "room": "Room 101" },
+    { "period": 3, "day": "Thursday", "time": "10:00 AM - 10:45 AM", "subject": "Maths", "teacher": "sunita mam", "room": "Room 204" },
+    { "period": 4, "day": "Thursday", "time": "10:45 AM - 11:30 AM", "subject": "Physics", "teacher": "kamal mam", "room": "Lab 1" },
+    { "period": 5, "day": "Thursday", "time": "11:30 AM - 12:15 PM", "subject": "Physics Lab", "teacher": "ankur sir", "room": "Lab 1" },
+    { "period": 6, "day": "Thursday", "time": "01:00 PM - 01:45 PM", "subject": "Chemistry", "teacher": "geenu mam", "room": "Lab 2" },
+    { "period": 7, "day": "Thursday", "time": "01:45 PM - 02:30 PM", "subject": "Biology", "teacher": "Ravi sir", "room": "BioLab" },
+    { "period": 8, "day": "Thursday", "time": "02:30 PM - 03:15 PM", "subject": "Physical Education", "teacher": "Vikram sir", "room": "Gym" },
+
+    { "period": 1, "day": "Friday", "time": "08:30 AM - 09:15 AM", "subject": "Physics", "teacher": "kamal mam", "room": "Lab 1" },
+    { "period": 2, "day": "Friday", "time": "09:15 AM - 10:00 AM", "subject": "Maths", "teacher": "sunita mam", "room": "Room 204" },
+    { "period": 3, "day": "Friday", "time": "10:00 AM - 10:45 AM", "subject": "Chemistry", "teacher": "geenu mam", "room": "Lab 2" },
+    { "period": 4, "day": "Friday", "time": "10:45 AM - 11:30 AM", "subject": "Computer Science", "teacher": "Ashita mam", "room": "CompLab A" },
+    { "period": 5, "day": "Friday", "time": "11:30 AM - 12:15 PM", "subject": "Physics Lab", "teacher": "ankur sir", "room": "Lab 1" },
+    { "period": 6, "day": "Friday", "time": "01:00 PM - 01:45 PM", "subject": "English Literature", "teacher": "Priya mam", "room": "Room 101" },
+    { "period": 7, "day": "Friday", "time": "01:45 PM - 02:30 PM", "subject": "Biology", "teacher": "Ravi sir", "room": "BioLab" },
+    { "period": 8, "day": "Friday", "time": "02:30 PM - 03:15 PM", "subject": "Physical Education", "teacher": "Vikram sir", "room": "Sports Ground" }
+  ],
+  "assignments": [
+    { "id": "asg1", "title": "Lab Report 1: Rotational Motion", "subject": "Physics", "dueDate": "2026-08-15", "totalPoints": 100 },
+    { "id": "asg2", "title": "Calculus Integration Set", "subject": "Maths", "dueDate": "2026-08-18", "totalPoints": 100 }
+  ]
+}

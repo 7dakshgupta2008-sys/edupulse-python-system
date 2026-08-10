@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if active_sub == 'overview' %}
+<div class="card">
+    <h2 style="font-size: 1.25rem;">📊 Overall Classroom Performance & Behavior Monitor</h2>
+    <p style="font-size: 0.85rem; color: #94a3b8;">Class 10-A • Monitor student academic standing, attendance alerts, and behavioral trends.</p>
+</div>
+
+<div class="card">
+    <h3 class="card-title">Class Roster Performance Overview</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Class</th>
+                <th>Calculated Average</th>
+                <th>GPA (C-Engine)</th>
+                <th>Attendance</th>
+                <th>AI Status</th>
+                <th>Behavioral Remark</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in student_ai_list %}
+            <tr>
+                <td style="font-weight: 700;">{{ item.student.name }}</td>
+                <td>{{ item.student.class }}</td>
+                <td style="font-weight: 800;">{{ item.ai.average_score }}%</td>
+                <td style="font-weight: 800; color: #3b82f6;">{{ item.ai.gpa }}</td>
+                <td>{{ item.student.attendance }}%</td>
+                <td><span class="badge badge-{{ item.ai.risk_badge }}">{{ item.ai.status }}</span></td>
+                <td style="font-size: 0.8rem; color: #94a3b8;">"{{ item.student.teacherRemarks }}"</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'marks' %}
+<div class="card">
+    <h3 class="card-title">Enter & Manage Marks</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Physics</th>
+                <th>Maths</th>
+                <th>Chemistry</th>
+                <th>CompSci</th>
+                <th>Calculated Average</th>
+                <th>GPA (C-Engine)</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in student_ai_list %}
+            <tr>
+                <td style="font-weight: 700;">{{ item.student.name }}</td>
+                <form action="/teacher/update_marks" method="POST">
+                    <input type="hidden" name="student_id" value="{{ item.student.id }}">
+                    <td><input type="number" name="physics" value="{{ item.student.marks.Physics }}" style="width: 55px; text-align: center;"></td>
+                    <td><input type="number" name="maths" value="{{ item.student.marks.Maths }}" style="width: 55px; text-align: center;"></td>
+                    <td><input type="number" name="chemistry" value="{{ item.student.marks.Chemistry }}" style="width: 55px; text-align: center;"></td>
+                    <td><input type="number" name="cs" value="{{ item.student.marks.ComputerScience }}" style="width: 55px; text-align: center;"></td>
+                    <td style="font-weight: 800;">{{ item.ai.average_score }}%</td>
+                    <td style="font-weight: 800; color: #3b82f6;">{{ item.ai.gpa }}</td>
+                    <td><button type="submit" class="btn btn-primary" style="font-size: 0.7rem;">Save Marks</button></td>
+                </form>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'attendance' %}
+<div class="card">
+    <h3 class="card-title">Update Daily Attendance</h3>
+    <table>
+        <thead>
+            <tr><th>Student Name</th><th>Attendance %</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            {% for s in students %}
+            <tr>
+                <td style="font-weight: 700;">{{ s.name }}</td>
+                <td style="font-weight: 800;">{{ s.attendance }}%</td>
+                <td>
+                    <form action="/teacher/update_attendance" method="POST" style="display:inline;">
+                        <input type="hidden" name="student_id" value="{{ s.id }}">
+                        <input type="hidden" name="attendance" value="{{ s.attendance + 2 }}">
+                        <button type="submit" class="btn btn-primary" style="font-size: 0.7rem;">+ Mark Present</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'assignments' %}
+<div class="grid-2">
+    <div class="card">
+        <h3 class="card-title">Add Course Assignment</h3>
+        <form action="/teacher/add_assignment" method="POST">
+            <label style="font-size: 0.8rem; color: #94a3b8;">Assignment Title:</label>
+            <input type="text" name="title" class="form-control" placeholder="Lab Report 2: Newton's Laws" required>
+
+            <label style="font-size: 0.8rem; color: #94a3b8;">Due Date:</label>
+            <input type="date" name="dueDate" class="form-control" required>
+
+            <button type="submit" class="btn btn-primary">Publish Assignment</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3 class="card-title">Active Student Assignment Submissions</h3>
+        <table>
+            <thead>
+                <tr><th>Student</th><th>Assignment</th><th>Status</th><th>Grade</th></tr>
+            </thead>
+            <tbody>
+                {% for s in students %}
+                {% for asg in s.assignments %}
+                <tr>
+                    <td style="font-weight: 700;">{{ s.name }}</td>
+                    <td>{{ asg.title }}</td>
+                    <td><span class="badge badge-success">{{ asg.status }}</span></td>
+                    <td style="font-weight: 800;">{{ asg.grade }}</td>
+                </tr>
+                {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% elif active_sub == 'quizzes' %}
+<div class="grid-2">
+    <div class="card">
+        <h3 class="card-title">Add New Quiz / Test</h3>
+        <form action="/teacher/add_quiz" method="POST">
+            <label style="font-size: 0.8rem; color: #94a3b8;">Quiz Title:</label>
+            <input type="text" name="title" class="form-control" placeholder="Physics Quiz 2" required>
+
+            <button type="submit" class="btn btn-primary">Publish Quiz</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <h3 class="card-title">Active Class Quizzes</h3>
+        {% for q in students[0].quizzes %}
+        <div style="font-size: 0.85rem; padding: 0.3rem 0; border-bottom: 1px solid #334155;">
+            • <strong>{{ q.title }}</strong> (Date: {{ q.date }}) — Total: {{ q.total }} Marks
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% elif active_sub == 'records' %}
+<div class="card">
+    <h3 class="card-title">View / Manage Student Records & Behavioral Remarks</h3>
+    <form action="/teacher/add_remark" method="POST" style="margin-bottom: 1rem;">
+        <label style="font-size: 0.8rem; color: #94a3b8;">Select Student:</label>
+        <select name="student_id" class="form-control" style="width: 250px;">
+            {% for s in students %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label style="font-size: 0.8rem; color: #94a3b8;">Behavioral Feedback & Remarks:</label>
+        <input type="text" name="remark" class="form-control" placeholder="Type behavioral feedback..." required>
+
+        <button type="submit" class="btn btn-primary">Save Remark</button>
+    </form>
+
+    {% for s in students %}
+    <div style="margin-top: 0.5rem; font-size: 0.85rem; padding: 0.5rem; background: rgba(255,255,255,0.02); border-radius: 4px;">
+        <strong>{{ s.name }} (ID: {{ s.studentId }}):</strong> "{{ s.teacherRemarks }}"
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}

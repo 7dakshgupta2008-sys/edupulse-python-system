@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="card">
+    <h2 style="font-size: 1.25rem;">👪 Parent Portal — {{ parent.name }}</h2>
+    <p style="font-size: 0.85rem; color: #94a3b8;">
+        Monitoring Child: <strong>{{ child.name }}</strong> ({{ child.class }}) • Contact: {{ parent.phone }}
+    </p>
+</div>
+
+{% if active_sub == 'performance' %}
+<div class="grid-3">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 1.8rem; font-weight: 800; color: #3b82f6;">{{ ai.average_score }}%</div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">Average Marks</div>
+    </div>
+
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 1.8rem; font-weight: 800; color: {% if child.attendance >= 75 %}#10b981{% else %}#ef4444{% endif %};">
+            {{ child.attendance }}%
+        </div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">Attendance Rate</div>
+    </div>
+
+    <div class="card" style="text-align: center;">
+        <div style="margin-top: 0.4rem;"><span class="badge badge-{{ ai.risk_badge }}">{{ ai.status }}</span></div>
+        <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 0.4rem;">AI Status</div>
+    </div>
+</div>
+
+<div class="card" style="border-left: 4px solid #10b981;">
+    <h3 class="card-title">💡 AI Home Support Advice for Parents</h3>
+    <p style="font-size: 0.9rem; line-height: 1.6; color: #f8fafc; margin-top: 0.5rem;">
+        {{ ai.parent_tip }}
+    </p>
+</div>
+
+{% elif active_sub == 'profile' %}
+<div class="card">
+    <h3 class="card-title">Student Profile Details</h3>
+    <div style="font-size: 0.9rem; padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 6px; display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+        <div><strong>Student Name:</strong> {{ child.name }}</div>
+        <div><strong>Student ID:</strong> {{ child.studentId }}</div>
+        <div><strong>Class Section:</strong> {{ child.class }}</div>
+        <div><strong>Parent/Guardian:</strong> {{ parent.name }}</div>
+        <div><strong>Guardian Phone:</strong> {{ parent.phone }}</div>
+        <div><strong>Guardian Email:</strong> {{ parent.email }}</div>
+    </div>
+</div>
+
+{% elif active_sub == 'marks' %}
+<div class="card">
+    <h3 class="card-title">Child Academic Marks</h3>
+    <table>
+        <thead>
+            <tr><th>Subject</th><th>Score</th></tr>
+        </thead>
+        <tbody>
+            {% for sub, score in child.marks.items() %}
+            <tr>
+                <td style="font-weight: 700;">{{ sub }}</td>
+                <td style="font-weight: 800;">{{ score }} / 100</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'attendance' %}
+<div class="card">
+    <h3 class="card-title">Child Attendance Record</h3>
+    <div style="padding: 1.5rem; text-align: center; background: rgba(255,255,255,0.03); border-radius: 8px;">
+        <div style="font-size: 2.2rem; font-weight: 800; color: {% if child.attendance >= 75 %}#10b981{% else %}#ef4444{% endif %};">
+            {{ child.attendance }}%
+        </div>
+        <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.25rem;">
+            {% if child.attendance >= 75 %}
+            ✅ Attendance is in Good Standing.
+            {% else %}
+            ⚠️ Attendance is below 75% required threshold.
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% elif active_sub == 'assignments' %}
+<div class="card">
+    <h3 class="card-title">Child Assignment Performance</h3>
+    <table>
+        <thead>
+            <tr><th>Assignment</th><th>Subject</th><th>Due Date</th><th>Status</th><th>Grade</th></tr>
+        </thead>
+        <tbody>
+            {% for asg in child.assignments %}
+            <tr>
+                <td style="font-weight: 700;">{{ asg.title }}</td>
+                <td>{{ asg.subject }}</td>
+                <td>{{ asg.dueDate }}</td>
+                <td><span class="badge badge-success">{{ asg.status }}</span></td>
+                <td style="font-weight: 800;">{{ asg.grade }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'quizzes' %}
+<div class="card">
+    <h3 class="card-title">Child Quiz & Test Results</h3>
+    <table>
+        <thead>
+            <tr><th>Quiz Title</th><th>Date</th><th>Score Obtained</th><th>Total Marks</th></tr>
+        </thead>
+        <tbody>
+            {% for q in child.quizzes %}
+            <tr>
+                <td style="font-weight: 700;">{{ q.title }}</td>
+                <td>{{ q.date }}</td>
+                <td style="font-weight: 800; color: #10b981;">{{ q.score }}</td>
+                <td>{{ q.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% elif active_sub == 'remarks' %}
+<div class="card">
+    <h3 class="card-title">Teacher Feedback Remarks</h3>
+    <p style="font-size: 0.9rem; padding: 1rem; background: rgba(255,255,255,0.03); border-radius: 6px;">
+        "{{ child.teacherRemarks }}"
+    </p>
+</div>
+
+{% elif active_sub == 'timetable' %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+        <h3 class="card-title" style="margin-bottom: 0;">🗓️ Child 8-Subject Class Timetable</h3>
+        
+        <!-- Day Selector Dropdown -->
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <label for="day-select-parent" style="font-size: 0.85rem; font-weight: 700; color: #3b82f6;">Select Day:</label>
+            <select id="day-select-parent" onchange="filterParentTimetable()" class="form-control" style="width: 160px; margin-bottom: 0; padding: 0.4rem 0.75rem; background-color: #0f172a; border-color: #3b82f6;">
+                <option value="Monday" selected>Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="ALL">Show All Days</option>
+            </select>
+        </div>
+    </div>
+
+    <table>
+        <thead>
+            <tr><th>Period</th><th>Day</th><th>Time Slot</th><th>Subject</th><th>Teacher</th><th>Room</th></tr>
+        </thead>
+        <tbody>
+            {% for t in timetable %}
+            <tr class="parent-timetable-row" data-day="{{ t.day }}">
+                <td style="font-weight: 800; color: #3b82f6;">Period {{ t.period if t.period else loop.index }}</td>
+                <td style="font-weight: 700;">{{ t.day }}</td>
+                <td>{{ t.time }}</td>
+                <td><span class="badge badge-success">{{ t.subject }}</span></td>
+                <td style="font-weight: 600; color: #f8fafc;">{{ t.teacher }}</td>
+                <td>{{ t.room }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function filterParentTimetable() {
+    const selectedDay = document.getElementById('day-select-parent').value;
+    const rows = document.querySelectorAll('.parent-timetable-row');
+    rows.forEach(row => {
+        const rowDay = row.getAttribute('data-day');
+        if (selectedDay === 'ALL' || rowDay === selectedDay) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+document.addEventListener('DOMContentLoaded', filterParentTimetable);
+</script>
+{% endif %}
+
+{% endblock %}
